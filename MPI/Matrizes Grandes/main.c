@@ -153,11 +153,13 @@ int main(int argc, char **argv)
     printf("\n\n");
   }
 
+  // Instanciando variáveis para armazenar os grupos das matrizes originais
   int subA[N/2][N/2], subB[N/2][N/2], subC1_1[N/2][N/2], subC1_2[N/2][N/2], subC2_1[N/2][N/2], subC2_2[N/2][N/2];
 
   
   // Rank 1
   if (world_rank == 1) {
+    // Separando grupos da matrizes A e B que serão calculados pelo processo 1
     for (int i = 0; i < N; ++i) {
       for (int j = 0; j < N; ++j) {
         if (i < N/2 && j >= N/2) {
@@ -169,15 +171,14 @@ int main(int argc, char **argv)
 
     // Somando as sub matrizes A1_2 e B1_2
     add_matrices(subA, subB, subC1_2);
-    for (int i = 0; i < N/2; ++i) {
-      for (int j = 0; j < N/2; ++j) {
-        MPI_Send(&subC1_2[i][j], 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-      }
-    }
+
+    // Enviado a matriz resultante para o processo 0
+    MPI_Send(&subC1_2, N * N / 2, MPI_INT, 0, 0, MPI_COMM_WORLD);
   }
 
   // Rank 2
   else if (world_rank == 2) {
+    // Separando grupos da matrizes A e B que serão calculados pelo processo 2
     for (int i = 0; i < N; ++i) {
       for (int j = 0; j < N; ++j) {
         if (i >= N/2 && j < N/2) {
@@ -189,15 +190,14 @@ int main(int argc, char **argv)
 
     // Somando as sub matrizes A2_1 e B2_1
     add_matrices(subA, subB, subC2_1);
-    for (int i = 0; i < N/2; ++i) {
-      for (int j = 0; j < N/2; ++j) {
-        MPI_Send(&subC2_1[i][j], 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-      }
-    }
+
+    // Enviado a matriz resultante para o processo 0
+    MPI_Send(&subC2_1, N * N / 2, MPI_INT, 0, 0, MPI_COMM_WORLD);
   }
 
   // Rank 3
   else if (world_rank == 3) {
+    // Separando grupos da matrizes A e B que serão calculados pelo processo 3
     for (int i = 0; i < N; ++i) {
       for (int j = 0; j < N; ++j) {
         if (i >= N/2 && j >= N/2) {
@@ -209,16 +209,14 @@ int main(int argc, char **argv)
 
     // Somando as sub matrizes A2_2 e B2_2
     add_matrices(subA, subB, subC2_2);
-    for (int i = 0; i < N/2; ++i) {
-      for (int j = 0; j < N/2; ++j) {
-        MPI_Send(&subC2_2[i][j], 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-      }
-    }
+
+    // Enviado a matriz resultante para o processo 0
+    MPI_Send(&subC2_2, N * N / 2, MPI_INT, 0, 0, MPI_COMM_WORLD);
   }
 
   // Rank 0
   else if (world_rank == 0) {
-    // Separando as sub matrizes A1_1 e B1_1
+    //Separando grupos da matrizes A e B que serão calculados pelo processo 0
     for (int i = 0; i < N; ++i) {
       for (int j = 0; j < N; ++j) {
         if (i < N/2 && j < N/2) {
@@ -232,28 +230,12 @@ int main(int argc, char **argv)
     add_matrices(subA, subB, subC1_1);
 
 
-    
-    
-    // Recebendo os valores calculados por cada processo
-    for (int i = 0; i < N/2; ++i) {
-      for (int j = 0; j < N/2; ++j) {
-        MPI_Recv(&subC1_2[i][j], 1, MPI_INT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      }
-    }
+    // Recebendo os valores calculados pelos processos 1, 2 e 3
+    MPI_Recv(&subC1_2, N * N / 2, MPI_INT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Recv(&subC2_1, N * N / 2, MPI_INT, 2, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Recv(&subC2_2, N * N / 2, MPI_INT, 3, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-    for (int i = 0; i < N/2; ++i) {
-      for (int j = 0; j < N/2; ++j) {
-        MPI_Recv(&subC2_1[i][j], 1, MPI_INT, 2, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      }
-    }
-
-    for (int i = 0; i < N/2; ++i) {
-      for (int j = 0; j < N/2; ++j) {
-        MPI_Recv(&subC2_2[i][j], 1, MPI_INT, 3, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      }
-    }
-
-    // Juntando os grupos da matriz C
+    // Juntando os grupos para formar a matriz C resultante
     join_matrices(
       matrixC,
       subC1_1, subC1_2,
