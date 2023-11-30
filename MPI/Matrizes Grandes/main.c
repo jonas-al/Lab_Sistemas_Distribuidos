@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Ordem da matriz
 #define N 8
 
+// Função para exibir as matrizes
 void display_matrix(int matrix[][N]) {
   for (int i = 0; i < N; ++i) {
     printf("\n");
@@ -23,6 +25,7 @@ void display_matrix(int matrix[][N]) {
   printf("\n");
 }
 
+// Função para exibir as sub matrizes
 void display_matrix_sub(int matrix[][4]) {
   for (int i = 0; i < 4; ++i) {
     printf("\n");
@@ -42,14 +45,16 @@ void display_matrix_sub(int matrix[][4]) {
   printf("\n");
 }
 
+// Função para gerar matriz
 void generate_matrix(int matrix[][N]) {
   for (int i = 0; i < N; ++i) {
     for (int j = 0; j < N; ++j) {
-      matrix[i][j] = rand() % 10;
+      matrix[i][j] = rand() % 10; // Gerando números de 0 a 10
     }
   }
 }
 
+// Função para separar os grupos das matrizes (não foi utilizada de fato)
 void split_matrix(
   int matrix[][N],
   int matrix_block_one[N/2][N/2],
@@ -78,7 +83,7 @@ void split_matrix(
   }
 }
 
-
+// Função para juntar os grupos da matrizes
 void join_matrices(
   int matrix[][N],
   int matrix_block_one[N/2][N/2],
@@ -107,6 +112,7 @@ void join_matrices(
   }
 }
 
+// Função para somar matrizes
 void add_matrices(int matrizA[][N/2], int matrizB[][N/2], int matrixC[][N/2]) {
   for (int i = 0; i < N/2; ++i) {
     for (int j = 0; j < N/2; ++j) {
