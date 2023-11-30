@@ -253,7 +253,6 @@ int main(int argc, char **argv)
     display_matrix(matrixC);
   }
 
-
   MPI_Finalize();
   return EXIT_SUCCESS;
 }

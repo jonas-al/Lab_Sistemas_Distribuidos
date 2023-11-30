@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
   // Basicamente o processo 0 envia o ping_pong_count para o processo 1 quando o ping_pong_count for par.
   // Caso contrário o processo 1 envia o ping_pong_count para o processo  0
 
-  // O ping_pong_count defini é o contador usado para iterar no loop while
+  // O ping_pong_count é o contador usado para iterar no loop while
   int ping_pong_count = 0;
 
   // O partner_rank defini quem vai receber a mensagem
@@ -31,8 +31,8 @@ int main(int argc, char** argv) {
     // Se ping_pong_count for par o processo 0 envia para o processo 1
     // Se ping_pong_count for ímpar o processo 1 envia para o processo 0
 
-    // O envio do ping_pong_count é excessncial para o funcionamento do código, pois ele
-    // é responsavél por definir o processo remetente e receptor.
+    // O envio do ping_pong_count é essencial para o funcionamento do código, pois ele
+    // é responsável  por definir o processo remetente e receptor.
     printf("world_rank = %i\n", world_rank);
     if (world_rank == ping_pong_count % 2) {
       // Increment the ping pong count before you send it

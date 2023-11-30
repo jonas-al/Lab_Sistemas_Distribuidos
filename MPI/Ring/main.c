@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
   int world_size;
   MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
-  // Basicamente funciona com se fosse uma anel. Um processo N envia o token para o processo N+1
+  // Basicamente funciona como se fosse um anel. Um processo N envia o token para o processo N+1
   // Caso N seja = 5 processo irá ocorrer assim:
   // 0 envia para o token 1
   // 1 envia para o token 2
@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
   // 4 envia para o token 5
   // 5 envia para o token 0
 
-  // O world_size é super importante, pois ele é a informação de quantos processos serão executados.
+  // A váriavel world_size é super importante, pois ele é a informação de quantos processos serão executados.
 
   // O token é o dado que será enviado e recebido pelos processos
   int token;
