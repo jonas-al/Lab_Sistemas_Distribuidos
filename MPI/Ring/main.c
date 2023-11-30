@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
   // 4 envia para o token 5
   // 5 envia para o token 0
 
-  // A váriavel world_size é super importante, pois ele é a informação de quantos processos serão executados.
+  // A váriavel world_size é super importante, pois ela é a informação de quantos processos serão executados.
 
   // O token é o dado que será enviado e recebido pelos processos
   int token;
